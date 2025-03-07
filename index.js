@@ -1,10 +1,13 @@
 import { ApplicationError } from './src/error-handler/application-error.js';
 import express from "express";
 import './env.js';
+import userRoutes from './src/features/user/user.routes.js';
 
 const app = express();
 
 app.use(express.json());
+
+app.use('/api/users', userRoutes);
 
 app.use((err, req, res, next) => {
     console.log(err);
