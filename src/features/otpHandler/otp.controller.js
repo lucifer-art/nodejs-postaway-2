@@ -1,12 +1,22 @@
 import { User } from "../user/user.schema.js";
 import OtpRepository from "./otp.repository.js";
+import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASSWORD,
+    }
+})
 
 export default class OtpController {
 
   constructor() {
     this.otpRepository = new OtpRepository();
   }
-  
+
   async sendOtp(req, res, next) {
     try {
       const { email } = req.body;
@@ -17,6 +27,12 @@ export default class OtpController {
         new Date(Date.now() + 10 * 60000)
       );
       // Send OTP using email service or SMS service here.
+      await transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to: email,
+        subject: "OTP Verification",
+        text: `Your OTP is ${otp}. Please enter it within 10 minutes to proceed.`
+      })
       res.status(201).send("OTP has been sent successfully!");
     } catch (err) {
       next(err);
