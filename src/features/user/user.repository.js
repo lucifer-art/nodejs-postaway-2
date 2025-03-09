@@ -78,4 +78,34 @@ export default class UserRepository {
         throw new ApplicationError("Logout all devices - Something went wrong with the database", 500);
     }
   }
+
+  async getUserById(id) {
+    try {
+      const user  = await User.findById(id).select('-password -tokens');
+      return user;
+    } catch (err) {
+      console.log("Error getting user by id", err);
+      throw new ApplicationError("Get user by id - Something went wrong with the database", 500);
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      const users = await User.find().select('-password -tokens');
+      return users;
+    } catch (err) {
+      console.log("Error getting all users", err);
+      throw new ApplicationError("Get all users - Something went wrong with the database", 500);
+    }
+  }
+
+  async updateUser(id, updatedData) {
+    try {
+      const user = await User.findByIdAndUpdate(id, updatedData, {new: true}).select('-password -tokens');
+      return user;
+    } catch (err) {
+      console.log("Error updating user", err);
+      throw new ApplicationError("Update user - Something went wrong with the database", 500);
+    }
+  }
 }

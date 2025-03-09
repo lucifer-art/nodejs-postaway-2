@@ -64,4 +64,45 @@ export default class UserController {
         next(err);
     }
   }
+
+  async fetchUserProfile(req, res, next) {
+    try {
+      const user = await this.userRepository.getUserById(req.params.userId);
+      if(!user) {
+        return res.status(404).send("User not found");
+      }
+      res.status(200).send(user);
+    } catch(err) {
+      next(err);
+    }
+  }
+
+  async fetchAllUsers(req, res, next) {
+    try {
+      const users = await this.userRepository.getAllUsers();
+      if(!users) { 
+        return res.status(404).send("No users found");
+      }
+      res.status(200).send(users);
+    } catch(err) {
+      next(err);
+    }
+  }
+
+  async updateUserProfile(req, res, next) {
+    try {
+      let updatedData = req.body;
+      if(req.file) {
+        updatedData.avatar = '/uploads/' + req.file.filename;
+      }
+      const user = await this.userRepository.updateUser(req.params.userId, updatedData);
+      if(!user) {
+        return res.status(404).send("User not found");
+      } else {
+        res.status(200).send(user);
+      }
+    } catch(err) {
+      next(err);
+    }
+  }
 }

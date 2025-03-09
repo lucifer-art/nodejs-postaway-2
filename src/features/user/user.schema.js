@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         minLength: [8, "Password must be at least 8 characters"]
     },
+    avatar: {
+        type: String
+    },
     tokens: [{ type: String}]
 }, {timestamp: true})
 
