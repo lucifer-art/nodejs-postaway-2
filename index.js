@@ -4,18 +4,19 @@ import './env.js';
 import userRoutes from './src/features/user/user.routes.js';
 import otpRoutes from './src/features/otpHandler/otp.routes.js';
 import jwtAuth from './src/middlewares/jwt.middleware.js';
+import postRoutes from './src/features/post/post.routes.js';
 
 const app = express();
 
 app.use(express.json());
 
-
 //routes
 app.use('/api/users', userRoutes);
 app.use('/api/otp', jwtAuth, otpRoutes);
+app.use('/api/posts', jwtAuth, postRoutes)
 
 
-//handle errore
+//handle error
 app.use((err, req, res, next) => {
     console.log(err);
     if (err instanceof ApplicationError) {
@@ -29,7 +30,5 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(404).send("API not found. Please check our documentation for more at localhost: 3500/api-docs");
 })
-
-
 
 export default app;

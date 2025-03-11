@@ -1,3 +1,4 @@
+import { ApplicationError } from "../../error-handler/application-error.js";
 import { User } from "./user.schema.js";
 import jwt from 'jsonwebtoken';
 
